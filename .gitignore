@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+_iss/unins000.dat
+*.dat
+*.d51
+Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/List/SimpleBLEPeripheral.map
+*.hex
+Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Obj/applicationBLE.r51

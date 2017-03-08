@@ -1592,3 +1592,34 @@ void device_Count_Calibration( int16 pesk_Move_Speed )
                     - pesk_Move_Speed / args[3] * args[4];
   }
 }
+
+#ifdef AUTOMOVE_FUNC
+/*********************************************************************
+ * @fn      postureReverse
+ */
+#pragma inline = forced
+static uint8 postureReverse( uint8 dataToReverse )
+{
+  return ( (dataToReverse == USER_STATUS_STAND) ? USER_STATUS_SIT : USER_STATUS_STAND );
+}
+
+/*********************************************************************
+ * @fn      autoMove_Reset
+ *
+ * @brief   Automatic movement data reset
+ *
+ * @param   data - pointer type data
+ *          posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  result
+ */
+autoMove_t autoMove_Reset( autoMove_t data, uint8 posture )
+{
+  if( posture )
+  {
+    data.userNextStatus = postureReverse( posture );
+    
+    data.timeRemaining;
+  }
+}
+#endif
