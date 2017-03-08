@@ -320,6 +320,15 @@ typedef struct FIFO
   uint8 dataCount;
 } FIFO_Data_t;
 
+#ifdef AUTOMOVE_FUNC
+typedef struct
+{
+  bool enable;
+  bool userNextStatus;
+  uint32 timeRemaining;
+} autoMove_t;
+#endif
+
 /*****************************************
 *      we declare our functions here 
 ******************************************/
@@ -644,6 +653,20 @@ void device_Set_MoveRange( uint8 *getData );
  * @return  none
  */
 void device_Set_MoveRange( uint8 *getData ); 
+#endif
+
+#ifdef AUTOMOVE_FUNC
+/*********************************************************************
+ * @fn      autoMove_Reset
+ *
+ * @brief   Automatic movement data reset
+ *
+ * @param   data - pointer type data
+ *          posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  result
+ */
+autoMove_t autoMove_Reset( autoMove_t data, uint8 posture );
 #endif
 
 #endif

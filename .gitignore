@@ -61,3 +61,5 @@ Projects/ble/SimpleBLEPeripheral/CC2540DB/settings/SimpleBLEPeripheral.wsdt
 *.cout
 *.pbi
 *.browse
+Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Obj/
+Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/List/
