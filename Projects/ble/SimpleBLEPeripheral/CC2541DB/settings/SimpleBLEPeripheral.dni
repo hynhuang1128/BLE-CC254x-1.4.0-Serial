@@ -1,0 +1,41 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[DebugChecksum]
+Checksum=-1475858566
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\Components\hal\target\CC2540EB\hal_key.c}.431.7" 0 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\Components\hal\target\CC2540EB\hal_key.c}.503.5" 0 0 0 0 "" 0 ""
+Count=2
+[ChipconEmu]
+Stop timers on halt=1
+Leave target running=1
+[Aliases]
+A0=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_adc.c" ""
+A1=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_aes.c" ""
+A2=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_dma.c" ""
+A3=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_startup.c" ""
+A4=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\osal\common\OSAL_PwrMgr.c" ""
+A5=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Projects\ble\Profiles\Roles\gap.c" ""
+A6=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Projects\ble\SimpleBLEPeripheral\Source\OSAL_SimpleBLEPeripheral.c" ""
+A7=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Projects\ble\SimpleBLEPeripheral\Source\SimpleBLEPeripheral_Main.c" ""
+Count=8
+SuppressDialog=0
