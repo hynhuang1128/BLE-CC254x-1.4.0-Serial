@@ -52,3 +52,12 @@ Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/List/SimpleBLEPeripheral.map
 *.hex
 Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Obj/applicationBLE.r51
 Projects/ble/SimpleBLEPeripheral/CC2540DB/SimpleBLEPeripheral.dep
+*.d51
+*.cout
+*.r51
+Projects/ble/SimpleBLEPeripheral/CC2540DB/settings/SimpleBLEPeripheral.wsdt
+*.map
+*.wsdt
+*.cout
+*.pbi
+*.browse
