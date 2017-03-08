@@ -63,3 +63,6 @@ Projects/ble/SimpleBLEPeripheral/CC2540DB/settings/SimpleBLEPeripheral.wsdt
 *.browse
 Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Obj/
 Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/List/
+Projects/ble/SimpleBLEPeripheral/CC2540DB/SimpleBLEPeripheral.dep
+Projects/ble/SimpleBLEPeripheral/CC2540DB/settings/SimpleBLEPeripheral.wsdt
+Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Obj/OSAL_SimpleBLEPeripheral.r51
