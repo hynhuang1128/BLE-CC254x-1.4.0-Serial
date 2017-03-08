@@ -75,10 +75,6 @@ hardwareInfo_t pesk_Hardware_Info;
 healthData_t user_HealthData[USER_HEALTHDATA_MAX_COUNT];
 lockData_t device_LockData;
    
-#ifdef AUTOMOVE_FUNC
-autoMove_t autoMoveData;
-#endif
-
 /*********************************************************************
  * EXTERNAL VARIABLES
  */
@@ -286,9 +282,6 @@ void SimpleBLEPeripheral_Init( uint8 task_id )
     uint8 charValue6[SIMPLEPROFILE_CHAR6_LEN] = { 0, 0, 0, 0, 0 };
     uint8 charValue7[SIMPLEPROFILE_CHAR7_LEN] = { 0, 0, 0, 0 };
     uint8 charValue8[SIMPLEPROFILE_CHAR8_LEN] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-#ifdef AUTOMOVE_FUNC
-    uint8 charValuef[SIMPLEPROFILE_CHARF_LEN] = { 0, 0, 0, 0, 0 };
-#endif
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR0, SIMPLEPROFILE_CHAR0_LEN, charValue0 );
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR1, SIMPLEPROFILE_CHAR1_LEN, charValue1 );
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR2, SIMPLEPROFILE_CHAR2_LEN, charValue2 );
@@ -298,9 +291,6 @@ void SimpleBLEPeripheral_Init( uint8 task_id )
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR6, SIMPLEPROFILE_CHAR6_LEN, charValue6 );
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR7, SIMPLEPROFILE_CHAR7_LEN, charValue7 );
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR8, SIMPLEPROFILE_CHAR8_LEN, charValue8 );
-#ifdef AUTOMOVE_FUNC
-    SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, charValuef );
-#endif
   }
 
 
@@ -748,33 +738,11 @@ static void performPeriodicTask( uint16 timeParam )
       userPosture = user_PostureEstimate( pesk_Current_Height, postureChange_Threshold );
       
       // Save user health data here
-#ifdef AUTOMOVE_FUNC
-      if( device_HealthData_Save( peskData.userPosture ); )
-      {
-        autoMoveData = autoMove_Reset( autoMoveData, peskData.userPosture );
-      }
-#else
       device_HealthData_Save( peskData.userPosture );
-#endif
     }
     
     /* Send current powered up time with Characteristic7 by 1000ms */
     device_Send_CurrentTime();
-
-#ifdef AUTOMOVE_FUNC
-    /* Countdown for the automatic movement */
-    if( autoMoveData.enable )
-    {
-      if( autoMoveData.timeRemaining )
-      {
-        autoMoveData.timeRemaining--;
-      }
-      else
-      {
-        autoMoveData = autoMove_Reset( autoMoveData, peskData.userPosture );
-      }
-    }
-#endif
     
 #if (defined PRODUCT_TYPE_BAR2) || (defined PRODCUT_TYPE_CUBE)
     /* Get current lock status periodicly by 1000ms */
@@ -856,13 +824,6 @@ static void simpleProfileChangeCB( uint8 paramID )
       /* Get the lock data from app */
       device_Set_LockData( newCharValue );
       break;
-      
-#ifdef AUTOMOVE_FUNC
-    case SIMPLEPROFILE_CHARF:
-      newCharValue = (uint8 *)osal_mem_alloc( sizeof( uint8 ) * SIMPLEPROFILE_CHARF_LEN );
-      SimpleProfile_GetParameter( SIMPLEPROFILE_CHARF, newCharValue );
-      break;
-#endif
       
     default:
       // should not reach here!
