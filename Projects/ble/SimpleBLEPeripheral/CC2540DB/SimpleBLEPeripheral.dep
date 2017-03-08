@@ -220,6 +220,10 @@
           <name>BICOMP</name>
           <file> 125</file>
         </tool>
+        <tool>
+          <name>ICC8051</name>
+          <file> 156</file>
+        </tool>
       </outputs>
       <inputs>
         <tool>
