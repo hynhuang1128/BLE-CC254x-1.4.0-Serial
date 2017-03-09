@@ -150,7 +150,7 @@
 #define BLE_NVID_USER_POSTURE_LEN            2
 #define BLE_NVID_DEVICE_LOCK                 0x9b
 #define BLE_NVID_DEVICE_LOCK_LEN             1
-
+                                               
 // Unit switch
 #define PESK_UNIT_BIT                        0x80
 #define PESK_METRICHEIGHT_MIN                600   
@@ -180,7 +180,7 @@
 
 // Device informations
 #define DEVICE_TYPE_DEFAULT                  DEVICE_BAR2
-#define DEVICE_PESK_DEFAULT                  PESK_DOUBLESEG_METRIC
+#define DEVICE_PESK_DEFAULT                  PESK_TRIPLESEG_METRIC
 #define DEVICE_VERSION_DEFAULT               0x0000
 
 // Device types
@@ -224,6 +224,18 @@
 
 // Characteristic5 send period
 #define CHAR5_SEND_PERIOD                    500
+                                               
+// Automatic movement relative                                  
+#ifdef AUTOMOVE_FUNC
+#define BLE_NVID_AUTOMOVE                    0x9c
+#define BLE_NVID_AUTOMOVE_LEN                5        
+#define BLE_NVID_AUTOMOVE_EN_LEN             1
+                                               
+#define AUTOMOVE_MIN_SIT_TIME                30
+#define AUTOMOVE_MIN_STAND_TIME              15
+#define AUTOMOVE_DEFAULT_SIT_TIME            30
+#define AUTOMOVE_DEFAULT_STAND_TIME          15
+#endif                                               
 /*********************************************************************
  * TYPEDEFS
  */
@@ -319,6 +331,37 @@ typedef struct FIFO
   uint16 dataValue;
   uint8 dataCount;
 } FIFO_Data_t;
+
+#ifdef AUTOMOVE_FUNC
+typedef struct
+{
+  bool enable;
+  bool userNextStatus;
+  uint32 timeRemaining;
+} autoMove_t;
+  
+typedef struct
+{
+  union
+  {
+    uint16 timeToStand;
+    struct
+    {
+      uint8 timeToStand_H;
+      uint8 timeToStand_L;
+    };
+  };
+  union
+  {
+    uint16 timeToSit;
+    struct
+    {
+      uint8 timeToSit_H;
+      uint8 timeToSit_L;
+    };
+  };
+} autoMoveTime_t;
+#endif
 
 /*****************************************
 *      we declare our functions here 
@@ -646,5 +689,41 @@ void device_Set_MoveRange( uint8 *getData );
 void device_Set_MoveRange( uint8 *getData ); 
 #endif
 
+#ifdef AUTOMOVE_FUNC
+/*********************************************************************
+ * @fn      autoMove_Reset
+ *
+ * @brief   Automatic movement data reset
+ *
+ * @param   posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  none
+ */
+void autoMove_Reset( uint8 posture );
+
+/*********************************************************************
+ * @fn      device_Set_AutoMove
+ *
+ * @brief   Automatic movement data set
+ *
+ * @param   getData - pointer type of an array
+ *  
+ * @return  none
+ */
+void device_Set_AutoMove( uint8 *getData );
+
+/*********************************************************************
+ * @fn      autoMove_Move
+ *
+ * @brief   Automatic movement go
+ *
+ * @param   data - pointer type data
+ *          posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  result
+ */
+void autoMove_Move();
+
+#endif
 
 #endif

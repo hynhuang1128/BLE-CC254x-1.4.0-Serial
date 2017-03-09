@@ -31,6 +31,9 @@ peskStatus_t peskData;
 memorySet_t device_Memory_Set[DEVICE_MEMORY_NUM];
 deviceInfo_t device_Init_Info;
 
+#ifdef AUTOMOVE_FUNC
+autoMoveTime_t autoMoveTimeData;
+#endif
 /**************************************************************************************************
  * EXTERN VARIBLES
  */
@@ -47,9 +50,20 @@ extern hardwareInfo_t pesk_Hardware_Info;
 extern lockData_t device_LockData;
 extern bool device_SendHealthData_Enable;
 extern bool device_BLE_Connect_Flag;
+
+#ifdef AUTOMOVE_FUNC
+extern autoMove_t autoMoveData;
+#endif
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
+
+#ifdef AUTOMOVE_FUNC
+/*********************************************************************
+ * @fn      device_Get_AutoMove
+ */
+static void device_Get_AutoMove( uint8 *buffer );
+#endif
 
 /*********************************************************************
  * @fn      peskCmdHandle
@@ -613,6 +627,13 @@ void device_HardwareInfo_Setup()
   device_Get_Posture( buffer );
   SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR2, SIMPLEPROFILE_CHAR2_LEN, buffer );
   osal_mem_free( buffer );
+  
+#ifdef AUTOMOVE_FUNC
+  buffer = (uint8 *)osal_mem_alloc( sizeof( uint8 ) * SIMPLEPROFILE_CHARF_LEN );
+  device_Get_AutoMove( buffer );
+  SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, buffer );
+  osal_mem_free( buffer );
+#endif
   
   /* start the watch dog timer */
   DEVICE_WDT_START();
@@ -1593,3 +1614,133 @@ void device_Count_Calibration( int16 pesk_Move_Speed )
   }
 }
 
+#ifdef AUTOMOVE_FUNC
+/*********************************************************************
+ * @fn      postureReverse
+ */
+#pragma inline = forced
+static uint8 postureReverse( uint8 dataToReverse )
+{
+  return ( (dataToReverse == USER_STATUS_STAND) ? USER_STATUS_SIT : USER_STATUS_STAND );
+}
+
+/*********************************************************************
+ * @fn      device_Get_AutoMove
+ */
+static void device_Get_AutoMove( uint8 *buffer )
+{
+  if( osal_snv_read( BLE_NVID_AUTOMOVE + BLE_NVID_AUTOMOVE_EN_LEN,
+                     BLE_NVID_AUTOMOVE_LEN - BLE_NVID_AUTOMOVE_EN_LEN,
+                     &autoMoveTimeData ) != SUCCESS )
+  {
+    autoMoveTimeData.timeToSit = 30;
+    autoMoveTimeData.timeToStand = 30;
+  }
+  
+  if( osal_snv_read( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable ) != SUCCESS )
+  {
+    autoMoveData.enable = false;
+  }
+  
+  *buffer = autoMoveData.enable;
+  *(buffer + 1) = autoMoveTimeData.timeToSit_L;
+  *(buffer + 2) = autoMoveTimeData.timeToSit_H;
+  *(buffer + 3) = autoMoveTimeData.timeToStand_L;
+  *(buffer + 4) = autoMoveTimeData.timeToStand_H;
+}
+
+/*********************************************************************
+ * @fn      autoMove_Reset
+ *
+ * @brief   Automatic movement data reset
+ *
+ * @param   posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  none
+ */
+void autoMove_Reset( uint8 posture )
+{
+  if( posture )
+  {
+    autoMoveData.userNextStatus = postureReverse( posture );
+    if( autoMoveData.userNextStatus == USER_STATUS_SIT )
+    {
+      autoMoveData.timeRemaining = autoMoveTimeData.timeToSit;
+    }
+    else
+    {
+      autoMoveData.timeRemaining = autoMoveTimeData.timeToStand;
+    }
+  }
+}
+
+/*********************************************************************
+ * @fn      device_Set_AutoMove
+ *
+ * @brief   Automatic movement data set
+ *
+ * @param   buffer - pointer type of an array
+ *  
+ * @return  none
+ */
+void device_Set_AutoMove( uint8 *getData )
+{
+  uint16 dataTemp;
+  dataTemp = *(getData + 1) + *(getData +2) * 256;
+  
+  if( dataTemp < AUTOMOVE_MIN_SIT_TIME )
+  {
+    *(getData + 1) = AUTOMOVE_DEFAULT_SIT_TIME / 256;
+    *(getData + 2) = AUTOMOVE_DEFAULT_SIT_TIME % 256;
+  }
+  dataTemp = *(getData + 3) + *(getData +4) * 256;
+  
+  if( dataTemp < AUTOMOVE_MIN_STAND_TIME )
+  {
+    *(getData + 3) = AUTOMOVE_DEFAULT_STAND_TIME / 256;
+    *(getData + 4) = AUTOMOVE_DEFAULT_STAND_TIME % 256;
+  }
+  
+  autoMoveTimeData.timeToSit_L = *(getData + 1);
+  autoMoveTimeData.timeToSit_H = *(getData + 2);
+  autoMoveTimeData.timeToStand_L = *(getData + 3);
+  autoMoveTimeData.timeToStand_H = *(getData + 4);
+  
+  if(*getData)
+  {
+    if(device_Memory_Set[0].height_Value > postureChange_Threshold ||
+       device_Memory_Set[1].height_Value < postureChange_Threshold)
+    {
+      *getData = false;
+    }
+  }
+  autoMoveData.enable = *getData;
+  
+  osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_LEN, getData );
+  SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, getData );
+}
+
+/*********************************************************************
+ * @fn      autoMove_Move
+ *
+ * @brief   Automatic movement go
+ *
+ * @param   data - pointer type data
+ *          posture - uint8 type data get from peskData.userPosture
+ *  
+ * @return  result
+ */
+void autoMove_Move()
+{
+  if( autoMoveData.userNextStatus == USER_STATUS_SIT )
+  {
+    pesk_Move_CurrentStatus = PESK_STATUS_SET;
+    device_Height_Destinate = device_Memory_Set[0].height_Value;
+  }
+  else
+  {
+    pesk_Move_CurrentStatus = PESK_STATUS_SET;
+    device_Height_Destinate = device_Memory_Set[1].height_Value;
+  }
+}
+#endif

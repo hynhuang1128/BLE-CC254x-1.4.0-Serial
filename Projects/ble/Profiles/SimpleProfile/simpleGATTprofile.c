@@ -58,8 +58,12 @@
 /*********************************************************************
  * CONSTANTS
  */
-#define SERVAPP_NUM_ATTR_SUPPORTED        30
 
+#ifdef AUTOMOVE_FUNC
+#define SERVAPP_NUM_ATTR_SUPPORTED        33
+#else
+#define SERVAPP_NUM_ATTR_SUPPORTED        30
+#endif
 /*********************************************************************
  * TYPEDEFS
  */
@@ -126,6 +130,14 @@ CONST uint8 simpleProfilechar8UUID[ATT_BT_UUID_SIZE] =
 { 
   LO_UINT16(SIMPLEPROFILE_CHAR8_UUID), HI_UINT16(SIMPLEPROFILE_CHAR8_UUID)
 };
+
+// Characteristic f UUID: 0xFFFF
+#ifdef  AUTOMOVE_FUNC
+CONST uint8 simpleProfilecharfUUID[ATT_BT_UUID_SIZE] =
+{ 
+  LO_UINT16(SIMPLEPROFILE_CHARF_UUID), HI_UINT16(SIMPLEPROFILE_CHARF_UUID)
+};
+#endif
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -250,6 +262,18 @@ static gattCharCfg_t simpleProfileChar8Config[GATT_MAX_NUM_CONN];
 
 // Simple Profile Characteristic 8 User Description
 static uint8 simpleProfileChar8UserDesp[12] = "Health Data\0";
+
+
+#ifdef AUTOMOVE_FUNC
+// Simple Profile Characteristic f Properties
+static uint8 simpleProfileCharfProps = GATT_PROP_READ | GATT_PROP_WRITE;
+
+// Characteristic f Value
+static uint8 simpleProfileCharf[SIMPLEPROFILE_CHARF_LEN] = { 0, 0, 0, 0, 0 };
+
+// Simple Profile Characteristic f User Description
+static uint8 simpleProfileCharfUserDesp[21] = "Automatic Move Data\0";
+#endif
 
 /*********************************************************************
  * Profile Attributes - Table
@@ -498,6 +522,31 @@ static gattAttribute_t simpleProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
         simpleProfileChar8UserDesp 
       },
       
+#ifdef AUTOMOVE_FUNC
+          // Characteristic f Declaration
+    { 
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ, 
+      0,
+      &simpleProfileCharfProps 
+    },
+
+      // Characteristic Value f
+      { 
+        { ATT_BT_UUID_SIZE, simpleProfilecharfUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 
+        0, 
+        simpleProfileCharf
+      },
+      
+      // Characteristic f User Description
+      { 
+        { ATT_BT_UUID_SIZE, charUserDescUUID },
+        GATT_PERMIT_READ, 
+        0, 
+        simpleProfileCharfUserDesp 
+      },
+#endif
 };
 
 
@@ -713,6 +762,19 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
         ret = bleInvalidRange;
       }
       break;
+    
+#ifdef AUTOMOVE_FUNC  
+    case SIMPLEPROFILE_CHARF:
+      if ( len == SIMPLEPROFILE_CHARF_LEN ) 
+      {
+        VOID osal_memcpy( simpleProfileCharf, value, SIMPLEPROFILE_CHARF_LEN );
+      }
+      else
+      {
+        ret = bleInvalidRange;
+      }
+      break;
+#endif
       
     default:
       ret = INVALIDPARAMETER;
@@ -763,6 +825,12 @@ bStatus_t SimpleProfile_GetParameter( uint8 param, void *value )
     case SIMPLEPROFILE_CHAR6:
       VOID osal_memcpy( value, simpleProfileChar6, SIMPLEPROFILE_CHAR6_LEN );
       break;
+
+#ifdef AUTOMOVE_FUNC
+    case SIMPLEPROFILE_CHARF:
+      VOID osal_memcpy( value, simpleProfileCharf, SIMPLEPROFILE_CHARF_LEN );
+      break; 
+#endif
       
     default:
       ret = INVALIDPARAMETER;
@@ -857,6 +925,13 @@ static uint8 simpleProfile_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr
         *pLen = SIMPLEPROFILE_CHAR8_LEN;
         VOID osal_memcpy( pValue, pAttr->pValue, SIMPLEPROFILE_CHAR8_LEN );
         break;
+
+#ifdef AUTOMOVE_FUNC  
+      case SIMPLEPROFILE_CHARF_UUID:
+        *pLen = SIMPLEPROFILE_CHARF_LEN;
+        VOID osal_memcpy( pValue, pAttr->pValue, SIMPLEPROFILE_CHARF_LEN );
+        break;
+#endif
         
       default:
         // Should never get here! (characteristics 1 and 2 do not have read permissions)
@@ -1077,6 +1152,32 @@ static bStatus_t simpleProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *
         }
              
         break;
+ 
+#ifdef AUTOMOVE_FUNC      
+      case SIMPLEPROFILE_CHARF_UUID:
+        //Validate the value
+        // Make sure it's not a blob oper
+        if ( offset == 0 )
+        {
+          if ( len != SIMPLEPROFILE_CHARF_LEN )
+          {
+            status = ATT_ERR_INVALID_VALUE_SIZE;
+          }
+        }
+        else
+        {
+          status = ATT_ERR_ATTR_NOT_LONG;
+        }
+
+        //Write the value
+        if ( status == SUCCESS )
+        {
+	  VOID osal_memcpy( pAttr->pValue, pValue, SIMPLEPROFILE_CHARF_LEN );
+          notifyApp = SIMPLEPROFILE_CHARF;
+        }
+             
+        break;
+#endif
         
       case GATT_CLIENT_CHAR_CFG_UUID:
         status = GATTServApp_ProcessCCCWriteReq( connHandle, pAttr, pValue, len,
