@@ -12,7 +12,7 @@
  * MACROS
  */
    
-#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                      \
+//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                      \
                                                 {                                                                                       \
                                                   uint8 buffer[4];                                                                      \
                                                   buffer[0] = msg0;                                                                     \
@@ -21,7 +21,6 @@
                                                   buffer[3] = msg3;                                                                     \
                                                   SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN, buffer );   \
                                                 } while(0)
-
 
 #define ENABLE                               1
 #define DISABLE                              0   
@@ -231,10 +230,12 @@
 #define BLE_NVID_AUTOMOVE_LEN                5        
 #define BLE_NVID_AUTOMOVE_EN_LEN             1
                                                
-#define AUTOMOVE_MIN_SIT_TIME                30
-#define AUTOMOVE_MIN_STAND_TIME              15
-#define AUTOMOVE_DEFAULT_SIT_TIME            30
-#define AUTOMOVE_DEFAULT_STAND_TIME          15
+#define AUTOMOVE_MIN_STANDTOSIT_TIME         15
+#define AUTOMOVE_MIN_SITTOSTAND_TIME         30
+#define AUTOMOVE_DEFAULT_STANDTOSIT_TIME     15
+#define AUTOMOVE_DEFAULT_SITTOSTAND_TIME     30
+                                                
+#define SETTING_DELAY_TIME                   3
 #endif                                               
 /*********************************************************************
  * TYPEDEFS

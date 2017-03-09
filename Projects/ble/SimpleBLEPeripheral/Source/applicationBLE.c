@@ -536,7 +536,9 @@ int16 device_Send_PeskData( uint16 send_Interval )
     *(buffer + 2) = peskData.info_H;
     *(buffer + 3) = peskData.info_L;
     
+#ifndef DEBUG_MSG
     SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN, buffer );
+#endif
     
     osal_mem_free( buffer );
   }
@@ -1378,6 +1380,10 @@ void device_Get_HandsetStatus()
   
   static uint8 handset_CurrentPressed;
   static uint8 handset_PreviousPressed;
+#ifdef AUTOMOVE_FUNC
+  static bool isHappened;
+  static uint16 delayTime;
+#endif
   
   GET_CURRENT_HANDSET();
   if( device_Current_CtrlMode != DEVICE_CTRL_APP )
@@ -1387,6 +1393,9 @@ void device_Get_HandsetStatus()
       device_Current_CtrlMode = DEVICE_CTRL_FREE;
       pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
       handset_PreviousPressed = HANDSET_STATUS_IDLE;
+#ifdef AUTOMOVE_FUNC
+      isHappened = false;
+#endif
       /* i added this line to solve the problem that once pressed the setting button,
       handset will continuousily sending the setting command to the control box */
       if( pesk_Move_PreviousStatus != PESK_STATUS_SET )
@@ -1422,7 +1431,7 @@ void device_Get_HandsetStatus()
                   device_Height_Destinate = device_Memory_Set[0].height_Value;
                 }
               }
-              else
+              else if( !peskData.info )
               {
                 device_Set_Single_Memory( 0, BLE_NVID_MEMORY_HEIGHT1, pesk_Current_Height );
                 DEVICE_SENDCMD_PESK( CMD_PESK_SET1 );
@@ -1438,7 +1447,7 @@ void device_Get_HandsetStatus()
                   device_Height_Destinate = device_Memory_Set[1].height_Value;
                 }
               }
-              else
+              else if( !peskData.info )
               {
                 device_Set_Single_Memory( 1, BLE_NVID_MEMORY_HEIGHT2, pesk_Current_Height );
                 DEVICE_SENDCMD_PESK( CMD_PESK_SET2 );
@@ -1454,7 +1463,7 @@ void device_Get_HandsetStatus()
                   device_Height_Destinate = device_Memory_Set[2].height_Value;
                 }
               }
-              else
+              else if( !peskData.info )
               {
                 device_Set_Single_Memory( 2, BLE_NVID_MEMORY_HEIGHT3, pesk_Current_Height );
                 DEVICE_SENDCMD_PESK( CMD_PESK_SET3 );
@@ -1470,7 +1479,7 @@ void device_Get_HandsetStatus()
                   device_Height_Destinate = device_Memory_Set[3].height_Value;
                 }
               }
-              else
+              else if( !peskData.info )
               {
                 device_Set_Single_Memory( 3, BLE_NVID_MEMORY_HEIGHT4, pesk_Current_Height );
                 DEVICE_SENDCMD_PESK( CMD_PESK_SET4 );
@@ -1483,7 +1492,7 @@ void device_Get_HandsetStatus()
               break;
                 
             default:
-              // should not get here!
+              // should not get here
               break;
             }
           }
@@ -1493,6 +1502,46 @@ void device_Get_HandsetStatus()
             pesk_Stop_Count = 0;
           }
           handset_PreviousPressed = handset_CurrentPressed;
+        }
+        else
+        {
+          if(handset_CurrentPressed == HANDSET_STATUS_SETTING)
+          {
+            DEVICE_SENDCMD_PESK( CMD_PESK_STOP );
+            
+            #ifdef AUTOMOVE_FUNC
+            if( delayTime > SETTING_DELAY_TIME * 5 )
+            {
+              if( !autoMoveData.enable )
+              {
+                if( device_Memory_Set[0].height_Value < postureChange_Threshold ||
+                    device_Memory_Set[1].height_Value > postureChange_Threshold )
+                {
+                  pesk_Move_CurrentStatus = PESK_STATUS_UP;
+                  autoMoveData.enable = true;
+                  autoMove_Reset( peskData.userPosture );
+                  osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable );
+                }
+              }
+              else
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_DOWN;
+                autoMoveData.enable = false;
+                osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable );
+              }
+            }
+            if( !isHappened )
+            {
+              delayTime++;
+              if( delayTime > SETTING_DELAY_TIME * 8 )
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
+                delayTime = 0;
+                isHappened = true;
+              }
+            }
+            #endif
+          }
         }
       }
     }
@@ -1688,17 +1737,17 @@ void device_Set_AutoMove( uint8 *getData )
   uint16 dataTemp;
   dataTemp = *(getData + 1) + *(getData +2) * 256;
   
-  if( dataTemp < AUTOMOVE_MIN_SIT_TIME )
+  if( dataTemp < AUTOMOVE_MIN_STANDTOSIT_TIME )
   {
-    *(getData + 1) = AUTOMOVE_DEFAULT_SIT_TIME / 256;
-    *(getData + 2) = AUTOMOVE_DEFAULT_SIT_TIME % 256;
+    *(getData + 1) = AUTOMOVE_DEFAULT_STANDTOSIT_TIME / 256;
+    *(getData + 2) = AUTOMOVE_DEFAULT_STANDTOSIT_TIME % 256;
   }
   dataTemp = *(getData + 3) + *(getData +4) * 256;
   
-  if( dataTemp < AUTOMOVE_MIN_STAND_TIME )
+  if( dataTemp < AUTOMOVE_MIN_SITTOSTAND_TIME )
   {
-    *(getData + 3) = AUTOMOVE_DEFAULT_STAND_TIME / 256;
-    *(getData + 4) = AUTOMOVE_DEFAULT_STAND_TIME % 256;
+    *(getData + 3) = AUTOMOVE_DEFAULT_SITTOSTAND_TIME / 256;
+    *(getData + 4) = AUTOMOVE_DEFAULT_SITTOSTAND_TIME % 256;
   }
   
   autoMoveTimeData.timeToSit_L = *(getData + 1);

@@ -784,13 +784,13 @@ static void performPeriodicTask( uint16 timeParam )
 
 #ifdef AUTOMOVE_FUNC
     /* Countdown for the automatic movement */
+    uint8 buffer[5];
+    buffer[0] = autoMoveData.enable;
     if( autoMoveData.enable )
     {
-      uint8 buffer[5];
       if( autoMoveData.timeRemaining )
       {
         autoMoveData.timeRemaining--;
-        buffer[0] = autoMoveData.enable;
         if( autoMoveData.userNextStatus == USER_STATUS_SIT )
         {
           buffer[1] = autoMoveData.timeRemaining / 256;
@@ -805,14 +805,25 @@ static void performPeriodicTask( uint16 timeParam )
           buffer[3] = autoMoveData.timeRemaining / 256;
           buffer[4] = autoMoveData.timeRemaining % 256;
         }
-        SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, buffer );
       }
       else
       {
+        buffer[1] = autoMoveTimeData.timeToSit_L;
+        buffer[2] = autoMoveTimeData.timeToSit_H;
+        buffer[3] = autoMoveTimeData.timeToStand_L;
+        buffer[4] = autoMoveTimeData.timeToStand_H;
         autoMove_Reset( peskData.userPosture );
         autoMove_Move();
       }
     }
+    else
+    {
+      buffer[1] = autoMoveTimeData.timeToSit_L;
+      buffer[2] = autoMoveTimeData.timeToSit_H;
+      buffer[3] = autoMoveTimeData.timeToStand_L;
+      buffer[4] = autoMoveTimeData.timeToStand_H;
+    }
+    SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, buffer );
 #endif
     
 #if (defined PRODUCT_TYPE_BAR2) || (defined PRODCUT_TYPE_CUBE)
