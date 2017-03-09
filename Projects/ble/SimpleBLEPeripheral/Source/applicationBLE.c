@@ -1393,7 +1393,7 @@ void device_Get_HandsetStatus()
               break;
               
             case HANDSET_STATUS_SET1:
-              if( peskData.peskStatus != PESK_STATUS_SAVE )
+              if( peskData.peskStatus != PESK_STATUS_SAVE && !peskData.info )
               {
                 if( device_Memory_Set[0].height_Value != VALUE_INVALID )
                 {
@@ -1409,7 +1409,7 @@ void device_Get_HandsetStatus()
               break;
             
             case HANDSET_STATUS_SET2:
-              if( peskData.peskStatus != PESK_STATUS_SAVE )
+              if( peskData.peskStatus != PESK_STATUS_SAVE && !peskData.info )
               {
                 if( device_Memory_Set[1].height_Value != VALUE_INVALID )
                 {
@@ -1425,7 +1425,7 @@ void device_Get_HandsetStatus()
               break;
               
             case HANDSET_STATUS_SET3:
-              if( peskData.peskStatus != PESK_STATUS_SAVE )
+              if( peskData.peskStatus != PESK_STATUS_SAVE && !peskData.info )
               {
                 if( device_Memory_Set[2].height_Value != VALUE_INVALID )
                 {
@@ -1441,7 +1441,7 @@ void device_Get_HandsetStatus()
               break;
               
             case HANDSET_STATUS_SET4:
-              if( peskData.peskStatus != PESK_STATUS_SAVE )
+              if( peskData.peskStatus != PESK_STATUS_SAVE && !peskData.info )
               {
                 if( device_Memory_Set[3].height_Value != VALUE_INVALID )
                 {
@@ -1472,6 +1472,13 @@ void device_Get_HandsetStatus()
             pesk_Stop_Count = 0;
           }
           handset_PreviousPressed = handset_CurrentPressed;
+        }
+        else
+        {
+          if(handset_CurrentPressed == HANDSET_STATUS_SETTING)
+          {
+            DEVICE_SENDCMD_PESK( CMD_PESK_STOP );
+          }
         }
       }
     }
