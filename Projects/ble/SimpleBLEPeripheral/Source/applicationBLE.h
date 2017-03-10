@@ -163,7 +163,7 @@
 #define USER_POSTURE_THRESHOLD_METRIC        900
 #define USER_POSTURE_THRESHOLD_IMPERIAL      354
 
-// RST status handle
+// ERR status handle
 #define PESKDATA_IN_RST                      0xaa010401
 #define PESKDATA_IN_NORMAL                   0x00000101
 #define PESKDATA_RST_ERRCODE                 0x01040101
@@ -173,7 +173,8 @@
 #define PESKDATA_IN_NORMAL_FILTER            0x0000ffff
 #define PESKDATA_IN_ERROR                    0x00000201
 #define PESK_RST_MIN_VALUE                   200
-
+#define PESKDATA_FAILURE                     0x0000
+                                               
 // Health data
 #define USER_HEALTHDATA_MAX_COUNT            201
 

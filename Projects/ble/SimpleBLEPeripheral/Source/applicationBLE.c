@@ -1239,13 +1239,17 @@ void device_Set_MoveRange( uint8 *getData )
  */
 void device_Set_PeskMoveStatus()
 {
-  if( peskData.peskStatus == PESK_STATUS_NORMAL )
+  if( peskData.peskStatus == PESK_STATUS_NORMAL && peskData.info != PESKDATA_FAILURE )
   {
     pesk_Current_Height = peskData.info;
   }
   else if( peskData.peskStatus != PESK_STATUS_SAVE )
   {
     pesk_Current_Height = pesk_Hardware_Info.height_Maximum;
+  }
+  else if( peskData.peskStatus == PESK_STATUS_SAVE )
+  {
+    device_Current_CtrlMode = DEVICE_CTRL_HANDSET;
   }
   
   if( pesk_Move_CurrentStatus == PESK_STATUS_IDLE )
@@ -1415,11 +1419,25 @@ void device_Get_HandsetStatus()
             switch( handset_CurrentPressed )
             {
             case HANDSET_STATUS_UP:
-              pesk_Move_CurrentStatus = PESK_STATUS_UP;
+              if( peskData.peskStatus == PESK_STATUS_SAVE && peskData.info )
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
+              }
+              else
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_UP;
+              }
               break;
               
             case HANDSET_STATUS_DOWN:
-              pesk_Move_CurrentStatus = PESK_STATUS_DOWN;
+              if( peskData.peskStatus == PESK_STATUS_SAVE && peskData.info )
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
+              }
+              else
+              {
+                pesk_Move_CurrentStatus = PESK_STATUS_DOWN;
+              }
               break;
               
             case HANDSET_STATUS_SET1:
