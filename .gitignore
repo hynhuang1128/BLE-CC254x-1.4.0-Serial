@@ -52,3 +52,6 @@ Projects/ble/SimpleBLEPeripheral/CC2540DB/CC2540/Exe/SimpleBLEPeripheral.d51
 *.d51
 *.d51
 *.hex
+*.hex
+*.wsdt
+*.cout

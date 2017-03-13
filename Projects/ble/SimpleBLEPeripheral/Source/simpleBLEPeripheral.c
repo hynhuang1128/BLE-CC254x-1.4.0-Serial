@@ -113,7 +113,7 @@ static uint8 scanRspData[] =
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
   //SSID for identification
   'O','f','f','i','c','e','w','e','l','l',' ',
-  '#','0','0','0','0','0','3',
+  '#','0','0','0','0','0','1',
 
 
   // connection interval range
@@ -753,20 +753,18 @@ static void performPeriodicTask( uint16 timeParam )
       
       // Save user health data here
 #ifdef AUTOMOVE_FUNC
+      if( device_Memory_Set[0].height_Value > postureChange_Threshold ||
+          device_Memory_Set[1].height_Value < postureChange_Threshold)
+      {
+        autoMoveData.enable = false;
+      }
       if( device_HealthData_Save( peskData.userPosture ) )
       {
         if( peskData.userPosture )
         {
-          if( osal_snv_read( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable ) != SUCCESS )
+          if(autoMoveData.enable)
           {
-            autoMoveData.enable = false;
-          }
-          else
-          {
-            if(autoMoveData.enable)
-            {
-              autoMove_Reset( peskData.userPosture );
-            }
+            autoMove_Reset( peskData.userPosture );
           }
         }
         else
@@ -786,7 +784,7 @@ static void performPeriodicTask( uint16 timeParam )
     /* Countdown for the automatic movement */
     uint8 buffer[5];
     buffer[0] = autoMoveData.enable;
-    if( autoMoveData.enable )
+    if( autoMoveData.enable && !pesk_Lock_Status )
     {
       if( autoMoveData.timeRemaining )
       {
@@ -914,6 +912,7 @@ static void simpleProfileChangeCB( uint8 paramID )
       
       /* Set the automatic movement data from app */
       device_Set_AutoMove( newCharValue );
+      autoMove_Reset( peskData.userPosture );
       break;
 #endif
       

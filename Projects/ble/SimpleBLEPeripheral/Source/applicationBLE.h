@@ -104,7 +104,7 @@
                                                 P0 = x;                         \
                                                 DEVICE_SET_PORT_INPUT();        \
                                               }                                 \
-                                              else                              \
+                                              else if( !pesk_Lock_Status )      \
                                               {                                 \
                                               DEVICE_SET_PORT_OUTPUT();         \
                                               P0 = x;                           \

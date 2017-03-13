@@ -1402,7 +1402,7 @@ void device_Get_HandsetStatus()
 #endif
       /* i added this line to solve the problem that once pressed the setting button,
       handset will continuousily sending the setting command to the control box */
-      if( pesk_Move_PreviousStatus != PESK_STATUS_SET )
+      if( pesk_Move_PreviousStatus != PESK_STATUS_SET || pesk_Lock_Status )
       {
         DEVICE_SENDCMD_PESK( CMD_PESK_STOP );
       }
@@ -1517,6 +1517,7 @@ void device_Get_HandsetStatus()
           else
           {
             pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
+            pesk_Move_PreviousStatus = PESK_STATUS_IDLE;
             pesk_Stop_Count = 0;
           }
           handset_PreviousPressed = handset_CurrentPressed;
@@ -1532,20 +1533,18 @@ void device_Get_HandsetStatus()
             {
               if( !autoMoveData.enable )
               {
-                if( device_Memory_Set[0].height_Value < postureChange_Threshold ||
+                if( device_Memory_Set[0].height_Value < postureChange_Threshold &&
                     device_Memory_Set[1].height_Value > postureChange_Threshold )
                 {
                   pesk_Move_CurrentStatus = PESK_STATUS_UP;
                   autoMoveData.enable = true;
                   autoMove_Reset( peskData.userPosture );
-                  osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable );
                 }
               }
               else
               {
                 pesk_Move_CurrentStatus = PESK_STATUS_DOWN;
                 autoMoveData.enable = false;
-                osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable );
               }
             }
             if( !isHappened )
@@ -1696,18 +1695,19 @@ static uint8 postureReverse( uint8 dataToReverse )
  */
 static void device_Get_AutoMove( uint8 *buffer )
 {
-  if( osal_snv_read( BLE_NVID_AUTOMOVE + BLE_NVID_AUTOMOVE_EN_LEN,
-                     BLE_NVID_AUTOMOVE_LEN - BLE_NVID_AUTOMOVE_EN_LEN,
-                     &autoMoveTimeData ) != SUCCESS )
+  uint8 dataBuf[5];
+  if( osal_snv_read( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_LEN, dataBuf ) != SUCCESS )
   {
-    autoMoveTimeData.timeToSit = 30;
-    autoMoveTimeData.timeToStand = 30;
+    dataBuf[1] = AUTOMOVE_DEFAULT_STANDTOSIT_TIME * 60 / 256;
+    dataBuf[2] = AUTOMOVE_DEFAULT_STANDTOSIT_TIME * 60 % 256;
+    dataBuf[3] = AUTOMOVE_DEFAULT_SITTOSTAND_TIME * 60 / 256;
+    dataBuf[4] = AUTOMOVE_DEFAULT_SITTOSTAND_TIME * 60 % 256;
   }
+  autoMoveTimeData.timeToSit = dataBuf[2] + dataBuf[1] * 256;
+  autoMoveTimeData.timeToStand = dataBuf[4] + dataBuf[3] * 256;
   
-  if( osal_snv_read( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_EN_LEN, &autoMoveData.enable ) != SUCCESS )
-  {
-    autoMoveData.enable = false;
-  }
+  autoMoveData.enable = false;
+  autoMoveData.timeRemaining = AUTOMOVE_DEFAULT_SITTOSTAND_TIME;
   
   *buffer = autoMoveData.enable;
   *(buffer + 1) = autoMoveTimeData.timeToSit_L;
@@ -1782,7 +1782,6 @@ void device_Set_AutoMove( uint8 *getData )
     }
   }
   autoMoveData.enable = *getData;
-  
   osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_LEN, getData );
   SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, getData );
 }
