@@ -1239,9 +1239,25 @@ void device_Set_MoveRange( uint8 *getData )
  */
 void device_Set_PeskMoveStatus()
 {
-  if( peskData.peskStatus == PESK_STATUS_NORMAL && peskData.info != PESKDATA_FAILURE )
+  static uint16 pesk_Previous_Height;
+  if( peskData.peskStatus == PESK_STATUS_NORMAL )
   {
     pesk_Current_Height = peskData.info;
+    if( pesk_Previous_Height != pesk_Current_Height && pesk_Previous_Height )
+    {
+      if( fabs( (int16)(pesk_Current_Height - pesk_Previous_Height) ) > PESK_CURRENT_HEIGHTDIFFER_TOLERATE )
+      {
+        pesk_Current_Height = pesk_Previous_Height;
+      }
+      else
+      {
+        pesk_Previous_Height = pesk_Current_Height;
+      }
+    }
+    else if( !pesk_Previous_Height )
+    {
+      pesk_Previous_Height = pesk_Current_Height;
+    }
   }
   else if( peskData.peskStatus != PESK_STATUS_SAVE )
   {

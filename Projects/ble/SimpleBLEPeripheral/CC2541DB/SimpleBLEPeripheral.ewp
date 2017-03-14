@@ -1345,8 +1345,10 @@
           <state>HAL_LCD=TRUE</state>
           <state>HAL_LED=TRUE</state>
           <state>HAL_UART=TRUE</state>
-          <state>WEBEE_BOARD</state>
-          <state>LCD_TO_UART</state>
+          <state>xWEBEE_BOARD</state>
+          <state>xLCD_TO_UART</state>
+          <state>PRODUCT_TYPE_BAR2</state>
+          <state>AUTOMOVE_FUNC</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -6439,6 +6441,9 @@
   </configuration>
   <group>
     <name>APP</name>
+    <file>
+      <name>$PROJ_DIR$\..\Source\applicationBLE.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\Source\OSAL_SimpleBLEPeripheral.c</name>
     </file>

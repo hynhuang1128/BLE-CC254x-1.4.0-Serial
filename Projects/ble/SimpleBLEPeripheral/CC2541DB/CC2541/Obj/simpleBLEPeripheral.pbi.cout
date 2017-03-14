@@ -1,73 +1,73 @@
-"F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\Source\simpleBLEPeripheral.c"
+"D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\Source\simpleBLEPeripheral.c"
 -std=c99
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\hal\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\hal\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\hal\target\CC2540EB
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\hal\target\CC2540EB
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\osal\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\osal\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\services\saddr
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\services\saddr
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\controller\phy
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\controller\phy
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\controller\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\controller\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\hci
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\hci
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\host
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\..\..\Components\ble\host
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common\cc2540
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common\cc2540
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common\npi\npi_np
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\common\npi\npi_np
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\Roles
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\Roles
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\SimpleProfile
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\SimpleProfile
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\DevInfo
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\SimpleBLEPeripheral\CC2541DB\..\..\Profiles\DevInfo
 -I
-D:\IAR Systems\Embedded Workbench 6.4\8051\inc
+D:\Program Files (x86)\IAR Systems\Embedded Workbench 6.4\8051\inc
 -I
-D:\IAR Systems\Embedded Workbench 6.4\8051\inc\clib
+D:\Program Files (x86)\IAR Systems\Embedded Workbench 6.4\8051\inc\clib
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\common
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\common
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\hal\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\hal\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\hal\target\CC2540EB
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\hal\target\CC2540EB
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\osal\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\osal\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\services\saddr
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\services\saddr
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\ble\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\ble\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\ble\controller\phy
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\ble\controller\phy
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\ble\controller\include
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\ble\controller\include
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\ble\hci
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\ble\hci
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Components\ble\host
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Components\ble\host
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\common\cc2540
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\common\cc2540
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\common\npi\npi_np
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\common\npi\npi_np
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Roles
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Roles
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\SimpleProfile
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\SimpleProfile
 -I
-F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ¸´«\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\DevInfo
+D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\DevInfo
 -DINT_HEAP_LEN=3072
 -DHALNODEBUG=0
 -DOSAL_CBTIMER_NUM_TASKS=1
@@ -78,8 +78,10 @@ F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ
 -DHAL_LCD=TRUE
 -DHAL_LED=TRUE
 -DHAL_UART=TRUE
--DWEBEE_BOARD=0
--DLCD_TO_UART=0
+-DxWEBEE_BOARD=0
+-DxLCD_TO_UART=0
+-DPRODUCT_TYPE_BAR2=0
+-DAUTOMOVE_FUNC=0
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0
@@ -374,8 +376,8 @@ F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ
 -D__XOR_DPSEL_SELECT__=1
 -D__PLAIN_INT_BITFIELD_IS_SIGNED__=1
 -D__IAR_COMPILERBASE__=592903
--D__DATE__="Jan 28 2015"
--D__TIME__="15:11:00"
+-D__DATE__="Mar 14 2017"
+-D__TIME__="14:58:08"
 -D__STDC__=1
 -D__STDC_VERSION__=199901L
 -D__STDC_HOSTED__=1
@@ -428,8 +430,10 @@ F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2¡¢Ð­ÒéÕ»ÊµÑé - 1.4.0\3.9 Êý¾ÝÍ
 -DHAL_LCD=TRUE
 -DHAL_LED=TRUE
 -DHAL_UART=TRUE
--DWEBEE_BOARD=1
--DLCD_TO_UART=1
+-DxWEBEE_BOARD=1
+-DxLCD_TO_UART=1
+-DPRODUCT_TYPE_BAR2=1
+-DAUTOMOVE_FUNC=1
 -D__VERSION__="IAR C/C++ Compiler V8.20.2.41139 for 8051"
 -D__CODE_MEMORY_LIST1__()=__CODE_MEM_HELPER1__(__code, 0 )
 -D__CODE_MEMORY_LIST2__(_P1)=__CODE_MEM_HELPER2__(__code, 0 ,  _P1 )

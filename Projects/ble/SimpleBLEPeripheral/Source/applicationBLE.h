@@ -12,14 +12,14 @@
  * MACROS
  */
    
-//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                      \
-                                                {                                                                                       \
-                                                  uint8 buffer[4];                                                                      \
-                                                  buffer[0] = msg0;                                                                     \
-                                                  buffer[1] = msg1;                                                                     \
-                                                  buffer[2] = msg2;                                                                     \
-                                                  buffer[3] = msg3;                                                                     \
-                                                  SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN, buffer );   \
+#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
+                                                {                                                                                             \
+                                                  uint8 debug_buffer[4];                                                                      \
+                                                  debug_buffer[0] = msg0;                                                                     \
+                                                  debug_buffer[1] = msg1;                                                                     \
+                                                  debug_buffer[2] = msg2;                                                                     \
+                                                  debug_buffer[3] = msg3;                                                                     \
+                                                  SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN, debug_buffer );   \
                                                 } while(0)
 
 #define ENABLE                               1
@@ -224,6 +224,9 @@
 
 // Characteristic5 send period
 #define CHAR5_SEND_PERIOD                    500
+
+// Validate the current height of pesk        
+#define PESK_CURRENT_HEIGHTDIFFER_TOLERATE   5
                                                
 // Automatic movement relative                                  
 #ifdef AUTOMOVE_FUNC
