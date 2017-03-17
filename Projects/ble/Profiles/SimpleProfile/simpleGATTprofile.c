@@ -183,7 +183,7 @@ static uint8 simpleProfileChar1UserDesp[14] = "Preset Height\0";
 
 
 // Simple Profile Characteristic 2 Properties
-static uint8 simpleProfileChar2Props = GATT_PROP_READ | GATT_PROP_WRITE;
+static uint8 simpleProfileChar2Props = GATT_PROP_READ;
 
 // Characteristic 2 Value
 static uint8 simpleProfileChar2[SIMPLEPROFILE_CHAR2_LEN] = { 0, 0 };
@@ -348,7 +348,7 @@ static gattAttribute_t simpleProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
       // Characteristic Value 2
       { 
         { ATT_BT_UUID_SIZE, simpleProfilechar2UUID },
-        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
+        GATT_PERMIT_READ,
         0, 
         simpleProfileChar2
       },
@@ -810,9 +810,11 @@ bStatus_t SimpleProfile_GetParameter( uint8 param, void *value )
       VOID osal_memcpy( value, simpleProfileChar1, SIMPLEPROFILE_CHAR1_LEN );
       break; 
 
+      /*
     case SIMPLEPROFILE_CHAR2:
       VOID osal_memcpy( value, simpleProfileChar2, SIMPLEPROFILE_CHAR2_LEN );
       break;      
+      */
 
     case SIMPLEPROFILE_CHAR3:
       VOID osal_memcpy( value, simpleProfileChar3, SIMPLEPROFILE_CHAR3_LEN );
@@ -1030,6 +1032,7 @@ static bStatus_t simpleProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *
              
         break;
         
+        /*
       case SIMPLEPROFILE_CHAR2_UUID:
         //Validate the value
         // Make sure it's not a blob oper
@@ -1044,7 +1047,8 @@ static bStatus_t simpleProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *
         {
           status = ATT_ERR_ATTR_NOT_LONG;
         }
-
+        
+        
         //Write the value
         if ( status == SUCCESS )
         {
@@ -1053,7 +1057,8 @@ static bStatus_t simpleProfile_WriteAttrCB( uint16 connHandle, gattAttribute_t *
         }
              
         break;
-      
+      */
+        
       case SIMPLEPROFILE_CHAR3_UUID:
         //Validate the value
         // Make sure it's not a blob oper

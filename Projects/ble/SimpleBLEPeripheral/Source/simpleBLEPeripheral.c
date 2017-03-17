@@ -753,11 +753,6 @@ static void performPeriodicTask( uint16 timeParam )
       
       // Save user health data here
 #ifdef AUTOMOVE_FUNC
-      if( device_Memory_Set[0].height_Value > postureChange_Threshold ||
-          device_Memory_Set[1].height_Value < postureChange_Threshold)
-      {
-        autoMoveData.enable = false;
-      }
       if( device_HealthData_Save( peskData.userPosture ) )
       {
         if( peskData.userPosture )
@@ -782,8 +777,16 @@ static void performPeriodicTask( uint16 timeParam )
 
 #ifdef AUTOMOVE_FUNC
     /* Countdown for the automatic movement */
-    uint8 buffer[5];
-    buffer[0] = autoMoveData.enable;
+    uint8 sendBuffer_F[5];
+    if( autoMoveData.enable )
+    {
+      sendBuffer_F[0] = autoMoveData.autoMoveStatus | AUTOMOVE_HIGHEST_BIT;
+    }
+    else
+    {
+      sendBuffer_F[0] = autoMoveData.autoMoveStatus & ~AUTOMOVE_HIGHEST_BIT;
+    }
+    
     if( autoMoveData.enable && !pesk_Lock_Status )
     {
       if( autoMoveData.timeRemaining )
@@ -791,37 +794,51 @@ static void performPeriodicTask( uint16 timeParam )
         autoMoveData.timeRemaining--;
         if( autoMoveData.userNextStatus == USER_STATUS_SIT )
         {
-          buffer[1] = autoMoveData.timeRemaining / 256;
-          buffer[2] = autoMoveData.timeRemaining % 256;
-          buffer[3] = autoMoveTimeData.timeToStand_L;
-          buffer[4] = autoMoveTimeData.timeToStand_H;
+          sendBuffer_F[1] = autoMoveData.timeRemaining / 256;
+          sendBuffer_F[2] = autoMoveData.timeRemaining % 256;
+          sendBuffer_F[3] = autoMoveTimeData.timeToStand_L;
+          sendBuffer_F[4] = autoMoveTimeData.timeToStand_H;
         }
         else
         {
-          buffer[1] = autoMoveTimeData.timeToSit_L;
-          buffer[2] = autoMoveTimeData.timeToSit_H;
-          buffer[3] = autoMoveData.timeRemaining / 256;
-          buffer[4] = autoMoveData.timeRemaining % 256;
+          sendBuffer_F[1] = autoMoveTimeData.timeToSit_L;
+          sendBuffer_F[2] = autoMoveTimeData.timeToSit_H;
+          sendBuffer_F[3] = autoMoveData.timeRemaining / 256;
+          sendBuffer_F[4] = autoMoveData.timeRemaining % 256;
         }
       }
       else
       {
-        buffer[1] = autoMoveTimeData.timeToSit_L;
-        buffer[2] = autoMoveTimeData.timeToSit_H;
-        buffer[3] = autoMoveTimeData.timeToStand_L;
-        buffer[4] = autoMoveTimeData.timeToStand_H;
-        autoMove_Reset( peskData.userPosture );
-        autoMove_Move();
+        sendBuffer_F[1] = autoMoveTimeData.timeToSit_L;
+        sendBuffer_F[2] = autoMoveTimeData.timeToSit_H;
+        sendBuffer_F[3] = autoMoveTimeData.timeToStand_L;
+        sendBuffer_F[4] = autoMoveTimeData.timeToStand_H;
+        if( autoMoveData.autoMoveStatus == AUTOMOVE_MODE_2 )
+        {
+          autoMove_Reset( peskData.userPosture );
+          autoMove_Move();
+        }
+        else if( autoMoveData.autoMoveStatus == AUTOMOVE_MODE_1 )
+        {
+          if( autoMove_Remind() )
+          {
+            autoMove_Reset( peskData.userPosture );
+          }
+        }
+        else
+        {
+          //do nothing
+        }
       }
     }
     else
     {
-      buffer[1] = autoMoveTimeData.timeToSit_L;
-      buffer[2] = autoMoveTimeData.timeToSit_H;
-      buffer[3] = autoMoveTimeData.timeToStand_L;
-      buffer[4] = autoMoveTimeData.timeToStand_H;
+      sendBuffer_F[1] = autoMoveTimeData.timeToSit_L;
+      sendBuffer_F[2] = autoMoveTimeData.timeToSit_H;
+      sendBuffer_F[3] = autoMoveTimeData.timeToStand_L;
+      sendBuffer_F[4] = autoMoveTimeData.timeToStand_H;
     }
-    SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, buffer );
+    SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, sendBuffer_F );
 #endif
     
 #if (defined PRODUCT_TYPE_BAR2) || (defined PRODCUT_TYPE_CUBE)
@@ -872,13 +889,13 @@ static void simpleProfileChangeCB( uint8 paramID )
       device_Set_Multiple_Memory( memoryBuf );
       break;
       
-      
+      /* reserved function
     case SIMPLEPROFILE_CHAR2:
       newCharValue = (uint8 *)osal_mem_alloc( sizeof( uint8 ) * SIMPLEPROFILE_CHAR2_LEN );
       SimpleProfile_GetParameter( SIMPLEPROFILE_CHAR2, newCharValue );
       device_Set_PostureThreshold( newCharValue );
       break;
-      
+      */
       
     case SIMPLEPROFILE_CHAR3:
       newCharValue = (uint8 *)osal_mem_alloc( sizeof( uint8 ) * SIMPLEPROFILE_CHAR3_LEN );

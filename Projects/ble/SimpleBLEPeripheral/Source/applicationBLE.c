@@ -11,7 +11,7 @@
 #define UART_MAX_COUNTER      5000
 #define PARAM_COUNT           4
 
-const uint16 device_Memory_Default[DEVICE_MEMORY_NUM] = { 750, 800, 1000, 1273, };
+const uint16 device_Memory_Default[DEVICE_MEMORY_NUM] = { 750, 1100, 700, 1200, };
 
 /**************************************************************************************************
  * MACROS
@@ -325,20 +325,16 @@ static int16 device_Speed_Calculate( FIFO_Data_t *speed )
 #if (defined PRODUCT_TYPE_BAR2) || (defined PRODUCT_TYPE_CUBE)
 /*********************************************************************
  * @fn      device_Get_Posture
+ * 
+ * @brief   get user's current posture
+ *
+ * @param   buffer - array type
+ *
+ * @return  none
  */
-static void device_Get_Posture( uint8 *buffer )
+void device_Get_Posture( uint8 *buffer )
 {
-  if( osal_snv_read( BLE_NVID_USER_POSTURE, BLE_NVID_USER_POSTURE_LEN, &postureChange_Threshold ) != SUCCESS )
-  {
-    if( !(device_Init_Info.peskType & PESK_UNIT_BIT) )
-    {
-      postureChange_Threshold = USER_POSTURE_THRESHOLD_METRIC;
-    }
-    else
-    {
-      postureChange_Threshold = USER_POSTURE_THRESHOLD_IMPERIAL;
-    }
-  }
+  postureChange_Threshold = (device_Memory_Set[0].height_Value + device_Memory_Set[1].height_Value) / 2;
   *buffer = postureChange_Threshold / 256;
   *(buffer + 1) = postureChange_Threshold % 256;
 }
@@ -559,7 +555,8 @@ int16 device_Send_PeskData( uint16 send_Interval )
 uint8 user_PostureEstimate( uint16 height, uint16 heightThreshold )
 {
   uint8 posture;
-  if( height >= heightThreshold )
+  if( getPolar( (int16)(height - heightThreshold) ) ==
+      getPolar( (int16)(device_Memory_Set[1].height_Value - heightThreshold) ) )
   {
     posture = USER_STATUS_STAND;
   }
@@ -932,6 +929,8 @@ void device_Set_Single_Memory( int index, uint8 ble_NVID, uint16 setHeight )
     *(buffer + i * 2 + 1) = device_Memory_Set[i].height_L; 
   }
   SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR1, SIMPLEPROFILE_CHAR1_LEN, buffer );
+  
+  device_Set_PostureThreshold();
 }
 #endif
 
@@ -962,6 +961,8 @@ void device_Set_Multiple_Memory( uint16 *setHeight )
     *(buffer + i * 2 + 1) =  device_Memory_Set[i].height_L;
   }
   SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR1, SIMPLEPROFILE_CHAR1_LEN, buffer );
+  
+  device_Set_PostureThreshold();
 }
 
 /*********************************************************************
@@ -1171,16 +1172,16 @@ void device_Set_InitInfo( uint8 *getData )
  *
  * @brief   Set the user's posture change threshold data by Characteristic2
  *
- * @param   getData - pointer type data that get from app
+ * @param   none
  *  
  * @return  none
  */
-void device_Set_PostureThreshold( uint8 *getData )
+void device_Set_PostureThreshold()
 {
-  uint8 *sendBuffer_Char2;
-  postureChange_Threshold = *(getData) * 256 + *(getData + 1);
-  sendBuffer_Char2 = getData;
-  osal_snv_write( BLE_NVID_USER_POSTURE, BLE_NVID_USER_POSTURE_LEN, getData );
+  uint8 sendBuffer_Char2[2];
+  postureChange_Threshold = (device_Memory_Set[0].height_Value + device_Memory_Set[1].height_Value) / 2;
+  sendBuffer_Char2[0] = postureChange_Threshold / 256;
+  sendBuffer_Char2[1] = postureChange_Threshold % 256;
   SimpleProfile_SetParameter( SIMPLEPROFILE_CHAR2, SIMPLEPROFILE_CHAR2_LEN, sendBuffer_Char2 );
 }
 
@@ -1549,13 +1550,9 @@ void device_Get_HandsetStatus()
             {
               if( !autoMoveData.enable )
               {
-                if( device_Memory_Set[0].height_Value < postureChange_Threshold &&
-                    device_Memory_Set[1].height_Value > postureChange_Threshold )
-                {
-                  pesk_Move_CurrentStatus = PESK_STATUS_UP;
-                  autoMoveData.enable = true;
-                  autoMove_Reset( peskData.userPosture );
-                }
+                pesk_Move_CurrentStatus = PESK_STATUS_UP;
+                autoMoveData.enable = true;
+                autoMove_Reset( peskData.userPosture );
               }
               else
               {
@@ -1696,6 +1693,18 @@ void device_Count_Calibration( int16 pesk_Move_Speed )
   }
 }
 
+/*********************************************************************
+ * @fn      getPolar
+ *
+ * @param   value - int16 type value
+ *
+ * @return  result - whether the value is positive or ti is negative
+ */
+bool getPolar( int16 value )
+{
+  return value < 0 ? VALUE_NEGATIVE : VALUE_POSITIVE;
+}
+
 #ifdef AUTOMOVE_FUNC
 /*********************************************************************
  * @fn      postureReverse
@@ -1714,6 +1723,7 @@ static void device_Get_AutoMove( uint8 *buffer )
   uint8 dataBuf[5];
   if( osal_snv_read( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_LEN, dataBuf ) != SUCCESS )
   {
+    dataBuf[0] = AUTOMOVE_MODE_0;
     dataBuf[1] = AUTOMOVE_DEFAULT_STANDTOSIT_TIME * 60 / 256;
     dataBuf[2] = AUTOMOVE_DEFAULT_STANDTOSIT_TIME * 60 % 256;
     dataBuf[3] = AUTOMOVE_DEFAULT_SITTOSTAND_TIME * 60 / 256;
@@ -1722,10 +1732,11 @@ static void device_Get_AutoMove( uint8 *buffer )
   autoMoveTimeData.timeToSit = dataBuf[2] + dataBuf[1] * 256;
   autoMoveTimeData.timeToStand = dataBuf[4] + dataBuf[3] * 256;
   
+  autoMoveData.autoMoveStatus = dataBuf[0];
   autoMoveData.enable = false;
   autoMoveData.timeRemaining = AUTOMOVE_DEFAULT_SITTOSTAND_TIME;
   
-  *buffer = autoMoveData.enable;
+  *buffer = autoMoveData.autoMoveStatus | (autoMoveData.enable << 7);
   *(buffer + 1) = autoMoveTimeData.timeToSit_L;
   *(buffer + 2) = autoMoveTimeData.timeToSit_H;
   *(buffer + 3) = autoMoveTimeData.timeToStand_L;
@@ -1768,38 +1779,51 @@ void autoMove_Reset( uint8 posture )
  */
 void device_Set_AutoMove( uint8 *getData )
 {
-  uint16 dataTemp;
-  dataTemp = *(getData + 1) + *(getData +2) * 256;
+  uint16 dataTemp[2];
+  dataTemp[0] = *(getData + 1) + *(getData +2) * 256;
+  dataTemp[1] = *(getData + 3) + *(getData +4) * 256;
   
-  if( dataTemp < AUTOMOVE_MIN_STANDTOSIT_TIME )
+  if( dataTemp[0] )
   {
-    *(getData + 1) = AUTOMOVE_DEFAULT_STANDTOSIT_TIME / 256;
-    *(getData + 2) = AUTOMOVE_DEFAULT_STANDTOSIT_TIME % 256;
+    autoMoveTimeData.timeToSit_L = *(getData + 1);
+    autoMoveTimeData.timeToSit_H = *(getData + 2);
   }
-  dataTemp = *(getData + 3) + *(getData +4) * 256;
-  
-  if( dataTemp < AUTOMOVE_MIN_SITTOSTAND_TIME )
+  else
   {
-    *(getData + 3) = AUTOMOVE_DEFAULT_SITTOSTAND_TIME / 256;
-    *(getData + 4) = AUTOMOVE_DEFAULT_SITTOSTAND_TIME % 256;
+    *(getData + 1) = autoMoveTimeData.timeToSit_L;
+    *(getData + 2) = autoMoveTimeData.timeToSit_H;
   }
   
-  autoMoveTimeData.timeToSit_L = *(getData + 1);
-  autoMoveTimeData.timeToSit_H = *(getData + 2);
-  autoMoveTimeData.timeToStand_L = *(getData + 3);
-  autoMoveTimeData.timeToStand_H = *(getData + 4);
+  if( dataTemp[1] )
+  {
+    autoMoveTimeData.timeToStand_L = *(getData + 3);
+    autoMoveTimeData.timeToStand_H = *(getData + 4);
+  }
+  else
+  {
+    *(getData + 3) = autoMoveTimeData.timeToStand_L;
+    *(getData + 4) = autoMoveTimeData.timeToStand_H;
+  }
   
-  if(*getData)
+  if( (*getData & AUTOMOVE_MODE_BITS) != AUTOMOVE_MODE_BITS )
+  {
+    autoMoveData.autoMoveStatus = *getData & (~AUTOMOVE_HIGHEST_BIT);
+  }
+  else
+  {
+    *getData = autoMoveData.autoMoveStatus;
+  }
+  
+  if( *getData & AUTOMOVE_HIGHEST_BIT )
   {
     if(device_Memory_Set[0].height_Value > postureChange_Threshold ||
        device_Memory_Set[1].height_Value < postureChange_Threshold)
     {
-      *getData = false;
+      *getData &= (~AUTOMOVE_HIGHEST_BIT);
     }
   }
-  autoMoveData.enable = *getData;
+  autoMoveData.enable = *getData & AUTOMOVE_HIGHEST_BIT;
   osal_snv_write( BLE_NVID_AUTOMOVE, BLE_NVID_AUTOMOVE_LEN, getData );
-  SimpleProfile_SetParameter( SIMPLEPROFILE_CHARF, SIMPLEPROFILE_CHARF_LEN, getData );
 }
 
 /*********************************************************************
@@ -1807,10 +1831,9 @@ void device_Set_AutoMove( uint8 *getData )
  *
  * @brief   Automatic movement go
  *
- * @param   data - pointer type data
- *          posture - uint8 type data get from peskData.userPosture
+ * @param   none
  *  
- * @return  result
+ * @return  none
  */
 void autoMove_Move()
 {
@@ -1823,6 +1846,37 @@ void autoMove_Move()
   {
     pesk_Move_CurrentStatus = PESK_STATUS_SET;
     device_Height_Destinate = device_Memory_Set[1].height_Value;
+  }
+}
+
+/*********************************************************************
+ * @fn      autoMove_Remind
+ *
+ * @brief   Automatic remind event
+ *
+ * @param   none
+ *  
+ * @return  Automatic movement remind is successfully involked.
+ */
+bool autoMove_Remind()
+{
+  if( device_Current_CtrlMode == DEVICE_CTRL_FREE )
+  {
+    if( autoMoveData.userNextStatus == USER_STATUS_SIT )
+    {
+      pesk_Move_CurrentStatus = PESK_STATUS_SET;
+      device_Height_Destinate = pesk_Current_Height - 5;
+    }
+    else
+    {
+      pesk_Move_CurrentStatus = PESK_STATUS_SET;
+      device_Height_Destinate = pesk_Current_Height + 5;
+    }
+    return true;
+  }
+  else
+  {
+    return false;
   }
 }
 #endif

@@ -12,7 +12,7 @@
  * MACROS
  */
    
-#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
+//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
                                                 {                                                                                             \
                                                   uint8 debug_buffer[4];                                                                      \
                                                   debug_buffer[0] = msg0;                                                                     \
@@ -227,6 +227,10 @@
 
 // Validate the current height of pesk        
 #define PESK_CURRENT_HEIGHTDIFFER_TOLERATE   5
+                       
+// Value polar
+#define VALUE_POSITIVE                       true
+#define VALUE_NEGATIVE                       false                       
                                                
 // Automatic movement relative                                  
 #ifdef AUTOMOVE_FUNC
@@ -240,6 +244,13 @@
 #define AUTOMOVE_DEFAULT_SITTOSTAND_TIME     30
                                                 
 #define SETTING_DELAY_TIME                   3
+
+#define AUTOMOVE_MODE_0                      0
+#define AUTOMOVE_MODE_1                      1
+#define AUTOMOVE_MODE_2                      2
+                                               
+#define AUTOMOVE_HIGHEST_BIT                 0x80
+#define AUTOMOVE_MODE_BITS                   0x0f
 #endif                                               
 /*********************************************************************
  * TYPEDEFS
@@ -342,6 +353,7 @@ typedef struct
 {
   bool enable;
   bool userNextStatus;
+  uint8 autoMoveStatus;
   uint32 timeRemaining;
 } autoMove_t;
   
@@ -653,11 +665,11 @@ void device_Set_InitInfo( uint8 *getData );
  *
  * @brief   Set the user's posture change threshold data by Characteristic2
  *
- * @param   getData - pointer type data that get from app
+ * @param   none
  *  
  * @return  none
  */
-void device_Set_PostureThreshold( uint8 *getData );
+void device_Set_PostureThreshold();
 
 /*********************************************************************
  * @fn      device_Count_Calibration
@@ -669,6 +681,17 @@ void device_Set_PostureThreshold( uint8 *getData );
  * @return  none
  */
 void device_Count_Calibration( int16 pesk_Move_Speed );
+
+/*********************************************************************
+ * @fn      device_Get_Posture
+ * 
+ * @brief   get user's current posture
+ *
+ * @param   buffer - array type
+ *
+ * @return  none
+ */
+void device_Get_Posture( uint8 *buffer );
 
 #if (defined PRODUCT_TYPE_BAR2) || (defined PRODUCT_TYPE_CUBE)
 /*********************************************************************
@@ -693,6 +716,15 @@ void device_Set_MoveRange( uint8 *getData );
  */
 void device_Set_MoveRange( uint8 *getData ); 
 #endif
+
+/*********************************************************************
+ * @fn      getPolar
+ *
+ * @param   value - int16 type value
+ *
+ * @return  result - whether the value is positive or ti is negative
+ */
+bool getPolar( int16 value );
 
 #ifdef AUTOMOVE_FUNC
 /*********************************************************************
@@ -722,12 +754,22 @@ void device_Set_AutoMove( uint8 *getData );
  *
  * @brief   Automatic movement go
  *
- * @param   data - pointer type data
- *          posture - uint8 type data get from peskData.userPosture
+ * @param   none
  *  
- * @return  result
+ * @return  none
  */
 void autoMove_Move();
+
+/*********************************************************************
+ * @fn      autoMove_Remind
+ *
+ * @brief   Automatic remind event
+ *
+ * @param   none
+ *  
+ * @return  Automatic movement remind is successfully involked.
+ */
+bool autoMove_Remind();
 
 #endif
 
