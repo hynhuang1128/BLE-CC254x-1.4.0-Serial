@@ -94,7 +94,7 @@
 #if !defined (OSC32K_CRYSTAL_INSTALLED) || (defined (OSC32K_CRYSTAL_INSTALLED) && (OSC32K_CRYSTAL_INSTALLED == TRUE))
   #define OSC_32KHZ  EXTERNAL_CRYSTAL_OSC /* external 32 KHz xosc */
 #else
-  #define OSC_32KHZ  INTERNAL_RC_OSC      /* internal 32 KHz rcosc */
+  #define OSC_32KHZ  EXTERNAL_CRYSTAL_OSC      /* internal 32 KHz rcosc */
 #endif
 
 // Minimum Time for Stable External 32kHz Clock (in ms)

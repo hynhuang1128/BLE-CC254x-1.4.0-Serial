@@ -1336,6 +1336,7 @@
         <option>
           <name>CCDefines</name>
           <state>INT_HEAP_LEN=3072</state>
+          <state>xPOWER_SAVING</state>
           <state>HALNODEBUG</state>
           <state>OSAL_CBTIMER_NUM_TASKS=1</state>
           <state>HAL_AES_DMA=TRUE</state>
@@ -1343,7 +1344,7 @@
           <state>HAL_UART=TRUE</state>
           <state>xPLUS_BROADCASTER</state>
           <state>HAL_LCD=TRUE</state>
-          <state>HAL_LED=FALSE</state>
+          <state>HAL_LED=TRUE</state>
           <state>PRODUCT_TYPE_BAR2</state>
           <state>xPRODUCT_TYPE_BAR</state>
           <state>xPRODUCT_TYPE_CUBE</state>

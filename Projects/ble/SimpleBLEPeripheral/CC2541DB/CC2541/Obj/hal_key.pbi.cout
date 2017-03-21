@@ -376,8 +376,8 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Dev
 -D__XOR_DPSEL_SELECT__=1
 -D__PLAIN_INT_BITFIELD_IS_SIGNED__=1
 -D__IAR_COMPILERBASE__=592903
--D__DATE__="Mar 14 2017"
--D__TIME__="14:57:41"
+-D__DATE__="Mar 21 2017"
+-D__TIME__="10:09:16"
 -D__STDC__=1
 -D__STDC_VERSION__=199901L
 -D__STDC_HOSTED__=1

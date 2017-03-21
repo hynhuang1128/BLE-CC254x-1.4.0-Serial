@@ -69,6 +69,7 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Sim
 -I
 D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\DevInfo
 -DINT_HEAP_LEN=3072
+-DxPOWER_SAVING=0
 -DHALNODEBUG=0
 -DOSAL_CBTIMER_NUM_TASKS=1
 -DHAL_AES_DMA=TRUE
@@ -76,7 +77,7 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Dev
 -DHAL_UART=TRUE
 -DxPLUS_BROADCASTER=0
 -DHAL_LCD=TRUE
--DHAL_LED=FALSE
+-DHAL_LED=TRUE
 -DPRODUCT_TYPE_BAR2=0
 -DxPRODUCT_TYPE_BAR=0
 -DxPRODUCT_TYPE_CUBE=0
@@ -375,8 +376,8 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Dev
 -D__XOR_DPSEL_SELECT__=1
 -D__PLAIN_INT_BITFIELD_IS_SIGNED__=1
 -D__IAR_COMPILERBASE__=592903
--D__DATE__="Mar  7 2017"
--D__TIME__="21:45:11"
+-D__DATE__="Mar 21 2017"
+-D__TIME__="10:39:43"
 -D__STDC__=1
 -D__STDC_VERSION__=199901L
 -D__STDC_HOSTED__=1
@@ -416,6 +417,7 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Dev
 -DHOST_CONFIG=PERIPHERAL_CFG
 -DGAP_PRIVACY_RECONNECT=1
 -DINT_HEAP_LEN=3072
+-DxPOWER_SAVING=1
 -DHALNODEBUG=1
 -DOSAL_CBTIMER_NUM_TASKS=1
 -DHAL_AES_DMA=TRUE
@@ -423,7 +425,7 @@ D:\Zeuse-hyn\embedded software\BLE-CC254x-1.4.0-Serial\Projects\ble\Profiles\Dev
 -DHAL_UART=TRUE
 -DxPLUS_BROADCASTER=1
 -DHAL_LCD=TRUE
--DHAL_LED=FALSE
+-DHAL_LED=TRUE
 -DPRODUCT_TYPE_BAR2=1
 -DxPRODUCT_TYPE_BAR=1
 -DxPRODUCT_TYPE_CUBE=1

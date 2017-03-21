@@ -742,6 +742,7 @@ static void performPeriodicTask( uint16 timeParam )
   if( !( timeParam % COUNT_PERIODIC_(500) ) )
   {
     DEVICE_WDT_FEED();
+    DEBUG_MSG(pesk_Current_Height >> 8, pesk_Current_Height, 0, 0);
   }
   
   if( !( timeParam % COUNT_PERIODIC_(1000) ) )
@@ -791,7 +792,7 @@ static void performPeriodicTask( uint16 timeParam )
     {
       if( autoMoveData.timeRemaining )
       {
-        autoMoveData.timeRemaining--;
+        autoMoveData.timeRemaining = timeUpdate( autoMoveData.timeDestination );
         if( autoMoveData.userNextStatus == USER_STATUS_SIT )
         {
           sendBuffer_F[1] = autoMoveData.timeRemaining / 256;
@@ -846,7 +847,7 @@ static void performPeriodicTask( uint16 timeParam )
     pesk_Lock_Status = device_Get_Current_LockStatus( device_LockData );
     if( device_LockData.timeStamp )
     {
-      device_LockData.timeStamp--;
+      device_LockData.timeStamp = timeUpdate( device_LockData.timeDestination );
     }
 #elif (defined PRODUCT_TYPE_BAR)
     // TODO the lock command protocol by JieChang

@@ -9,18 +9,11 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=1060632915
+Checksum=1684187620
 [CallStack]
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Breakpoints]
 Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\Components\hal\target\CC2540EB\hal_key.c}.431.5" 0 0 0 0 "" 0 ""
 Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\Components\hal\target\CC2540EB\hal_key.c}.515.3" 0 0 0 0 "" 0 ""
@@ -28,6 +21,13 @@ Count=2
 [ChipconEmu]
 Stop timers on halt=1
 Leave target running=1
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Aliases]
 A0=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_adc.c" ""
 A1=_ "F:\Webee\BLE\CC254X\Sample Program\CC2541\CC2541\2、协议栈实验 - 1.4.0\新建文件夹\BLE-CC254x-1.4.0-Link\Components\hal\target\CC2540EB\hal_aes.c" ""

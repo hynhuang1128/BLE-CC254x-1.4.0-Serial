@@ -12,7 +12,7 @@
  * MACROS
  */
    
-//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
+#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
                                                 {                                                                                             \
                                                   uint8 debug_buffer[4];                                                                      \
                                                   debug_buffer[0] = msg0;                                                                     \
@@ -339,6 +339,7 @@ typedef struct
     uint32 timeStamp;
     uint8 timeStamp_S[4];
   };
+  uint32 timeDestination;
 } lockData_t;
 
 typedef struct FIFO
@@ -355,6 +356,7 @@ typedef struct
   bool userNextStatus;
   uint8 autoMoveStatus;
   uint32 timeRemaining;
+  uint32 timeDestination;
 } autoMove_t;
   
 typedef struct
@@ -725,6 +727,15 @@ void device_Set_MoveRange( uint8 *getData );
  * @return  result - whether the value is positive or ti is negative
  */
 bool getPolar( int16 value );
+
+/*********************************************************************
+ * @fn      timeUpdate
+ *
+ * @param   timeDestinate - uint32 type value
+ *
+ * @return  time remaining
+ */
+uint32 timeUpdate( uint32 timeDestinate );
 
 #ifdef AUTOMOVE_FUNC
 /*********************************************************************

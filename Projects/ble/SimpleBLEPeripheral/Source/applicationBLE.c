@@ -1106,11 +1106,15 @@ void device_Send_CurrentTime()
  */
 void device_Set_LockData( uint8* getData )
 {
+  seprate_DataU32_t tempLockData;
   device_LockData.lockStatus = *getData;
+  osalTimeUpdate();
   for( int i = 1; i < SIMPLEPROFILE_CHAR6_LEN; i++ )
   {
-    device_LockData.timeStamp_S[SIMPLEPROFILE_CHAR6_LEN - i - 1] = *(getData + i);
+    tempLockData.data[i - 1] = *(getData + i);
   }
+  device_LockData.timeDestination = timestamp_Reverse( tempLockData.dataValue ) + osal_getClock();
+  device_LockData.timeStamp = tempLockData.dataValue;
   osal_snv_write( BLE_NVID_DEVICE_LOCK, BLE_NVID_DEVICE_LOCK_LEN, &device_LockData.lockStatus );
 }
 
@@ -1705,6 +1709,28 @@ bool getPolar( int16 value )
   return value < 0 ? VALUE_NEGATIVE : VALUE_POSITIVE;
 }
 
+/*********************************************************************
+ * @fn      timeUpdate
+ *
+ * @param   timeDestinate - uint32 type value
+ *
+ * @return  time remaining
+ */
+uint32 timeUpdate( uint32 timeDestinate )
+{
+  uint32 getClock;
+  osalTimeUpdate();
+  getClock = osal_getClock();
+  if( getClock < timeDestinate )
+  {
+    return ( timeDestinate - getClock );
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 #ifdef AUTOMOVE_FUNC
 /*********************************************************************
  * @fn      postureReverse
@@ -1754,16 +1780,19 @@ static void device_Get_AutoMove( uint8 *buffer )
  */
 void autoMove_Reset( uint8 posture )
 {
+  osalTimeUpdate();
   if( posture )
   {
     autoMoveData.userNextStatus = postureReverse( posture );
     if( autoMoveData.userNextStatus == USER_STATUS_SIT )
     {
       autoMoveData.timeRemaining = autoMoveTimeData.timeToSit;
+      autoMoveData.timeDestination = autoMoveData.timeRemaining + osal_getClock();
     }
     else
     {
       autoMoveData.timeRemaining = autoMoveTimeData.timeToStand;
+      autoMoveData.timeDestination = autoMoveData.timeRemaining + osal_getClock();
     }
   }
 }

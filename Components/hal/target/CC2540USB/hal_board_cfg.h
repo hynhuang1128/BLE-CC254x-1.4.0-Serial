@@ -76,7 +76,7 @@ extern "C"
 
 // For USB, assume internal, unless an external crystal is explicitly indicated.
 #if !defined (XOSC32K_INSTALLED) || (defined (XOSC32K_INSTALLED) && (XOSC32K_INSTALLED == FALSE))
-#define OSC_32KHZ                      INTERNAL_RC_OSC
+#define OSC_32KHZ                      EXTERNAL_CRYSTAL_OSC
 #else
 #define OSC_32KHZ                      EXTERNAL_CRYSTAL_OSC
 #endif

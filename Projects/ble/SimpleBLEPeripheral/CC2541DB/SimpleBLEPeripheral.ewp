@@ -6445,6 +6445,9 @@
       <name>$PROJ_DIR$\..\Source\applicationBLE.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\Source\applicationBLE.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\Source\OSAL_SimpleBLEPeripheral.c</name>
     </file>
     <file>
