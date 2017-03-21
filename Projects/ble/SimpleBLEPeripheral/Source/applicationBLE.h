@@ -12,7 +12,7 @@
  * MACROS
  */
    
-#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
+//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
                                                 {                                                                                             \
                                                   uint8 debug_buffer[4];                                                                      \
                                                   debug_buffer[0] = msg0;                                                                     \
@@ -174,7 +174,9 @@
 #define PESKDATA_IN_ERROR                    0x00000201
 #define PESK_RST_MIN_VALUE                   200
 #define PESKDATA_FAILURE                     0x0000
-                                               
+
+#define USER_DATA_FILTER                     0x11001111
+#define USER_DATA_RST                        0x040001aa                                            
 // Health data
 #define USER_HEALTHDATA_MAX_COUNT            201
 

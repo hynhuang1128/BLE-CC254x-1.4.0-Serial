@@ -113,7 +113,7 @@ static uint8 scanRspData[] =
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
   //SSID for identification
   'O','f','f','i','c','e','w','e','l','l',' ',
-  '#','0','0','0','0','f','f',
+  '#','0','0','0','0','1','b',
 
 
   // connection interval range
@@ -742,7 +742,6 @@ static void performPeriodicTask( uint16 timeParam )
   if( !( timeParam % COUNT_PERIODIC_(500) ) )
   {
     DEVICE_WDT_FEED();
-    DEBUG_MSG(pesk_Current_Height >> 8, pesk_Current_Height, 0, 0);
   }
   
   if( !( timeParam % COUNT_PERIODIC_(1000) ) )

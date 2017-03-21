@@ -1267,6 +1267,10 @@ void device_Set_PeskMoveStatus()
   else if( peskData.peskStatus != PESK_STATUS_SAVE )
   {
     pesk_Current_Height = pesk_Hardware_Info.height_Maximum;
+    if( peskData.currentPeskData & USER_DATA_FILTER == USER_DATA_RST )
+    {
+      pesk_Previous_Height = pesk_Hardware_Info.height_Minimum;
+    }
   }
   else if( peskData.peskStatus == PESK_STATUS_SAVE )
   {
