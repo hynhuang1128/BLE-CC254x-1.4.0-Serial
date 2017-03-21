@@ -1245,14 +1245,17 @@ void device_Set_MoveRange( uint8 *getData )
 void device_Set_PeskMoveStatus()
 {
   static uint16 pesk_Previous_Height;
+  static bool inSaveMode;
   if( peskData.peskStatus == PESK_STATUS_NORMAL )
   {
     pesk_Current_Height = peskData.info;
     if( pesk_Previous_Height != pesk_Current_Height && pesk_Previous_Height )
     {
-      if( fabs( (int16)(pesk_Current_Height - pesk_Previous_Height) ) > PESK_CURRENT_HEIGHTDIFFER_TOLERATE )
+      if( inSaveMode && 
+          fabs( (int16)(pesk_Current_Height - pesk_Previous_Height) ) > PESK_CURRENT_HEIGHTDIFFER_TOLERATE )
       {
         pesk_Current_Height = pesk_Previous_Height;
+        inSaveMode = false;
       }
       else
       {
@@ -1267,14 +1270,11 @@ void device_Set_PeskMoveStatus()
   else if( peskData.peskStatus != PESK_STATUS_SAVE )
   {
     pesk_Current_Height = pesk_Hardware_Info.height_Maximum;
-    if( peskData.currentPeskData & USER_DATA_FILTER == USER_DATA_RST )
-    {
-      pesk_Previous_Height = pesk_Hardware_Info.height_Minimum;
-    }
   }
   else if( peskData.peskStatus == PESK_STATUS_SAVE )
   {
     device_Current_CtrlMode = DEVICE_CTRL_HANDSET;
+    inSaveMode = true;
   }
   
   if( pesk_Move_CurrentStatus == PESK_STATUS_IDLE )
