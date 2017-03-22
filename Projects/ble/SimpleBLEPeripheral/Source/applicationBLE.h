@@ -12,7 +12,7 @@
  * MACROS
  */
    
-#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
+//#define DEBUG_MSG( msg0, msg1, msg2, msg3 )     do                                                                                            \
                                                 {                                                                                             \
                                                   uint8 debug_buffer[4];                                                                      \
                                                   debug_buffer[0] = msg0;                                                                     \
@@ -174,15 +174,13 @@
 #define PESKDATA_IN_ERROR                    0x00000201
 #define PESK_RST_MIN_VALUE                   200
 #define PESKDATA_FAILURE                     0x0000
-
-#define USER_DATA_FILTER                     0xff00ffff
-#define USER_DATA_RST                        0x0400aa01                                            
+                                          
 // Health data
 #define USER_HEALTHDATA_MAX_COUNT            201
 
 // Device informations
 #define DEVICE_TYPE_DEFAULT                  DEVICE_BAR2
-#define DEVICE_PESK_DEFAULT                  PESK_DOUBLESEG_METRIC
+#define DEVICE_PESK_DEFAULT                  PESK_TRIPLESEG_METRIC
 #define DEVICE_VERSION_DEFAULT               0x0000
 
 // Device types

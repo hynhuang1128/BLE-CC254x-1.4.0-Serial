@@ -113,7 +113,7 @@ static uint8 scanRspData[] =
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
   //SSID for identification
   'O','f','f','i','c','e','w','e','l','l',' ',
-  '#','0','0','0','0','1','3',
+  '#','0','0','0','0','1','b',
 
 
   // connection interval range

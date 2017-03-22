@@ -34,6 +34,9 @@ deviceInfo_t device_Init_Info;
 #ifdef AUTOMOVE_FUNC
 autoMoveTime_t autoMoveTimeData;
 #endif
+
+static bool inSaveMode;
+
 /**************************************************************************************************
  * EXTERN VARIBLES
  */
@@ -1245,11 +1248,10 @@ void device_Set_MoveRange( uint8 *getData )
 void device_Set_PeskMoveStatus()
 {
   static uint16 pesk_Previous_Height;
-  static bool inSaveMode;
   if( peskData.peskStatus == PESK_STATUS_NORMAL )
   {
     pesk_Current_Height = peskData.info;
-    if( pesk_Previous_Height != pesk_Current_Height && pesk_Previous_Height )
+    if( (pesk_Previous_Height != pesk_Current_Height) && pesk_Previous_Height )
     {
       if( inSaveMode && 
           fabs( (int16)(pesk_Current_Height - pesk_Previous_Height) ) > PESK_CURRENT_HEIGHTDIFFER_TOLERATE )
@@ -1274,7 +1276,7 @@ void device_Set_PeskMoveStatus()
   else if( peskData.peskStatus == PESK_STATUS_SAVE )
   {
     device_Current_CtrlMode = DEVICE_CTRL_HANDSET;
-    inSaveMode = true;
+    pesk_Current_Height = pesk_Previous_Height;
   }
   
   if( pesk_Move_CurrentStatus == PESK_STATUS_IDLE )
@@ -1532,6 +1534,7 @@ void device_Get_HandsetStatus()
             case HANDSET_STATUS_SETTING:
               pesk_Move_CurrentStatus = PESK_STATUS_IDLE;
               DEVICE_SENDCMD_PESK( CMD_PESK_SETTING );
+              inSaveMode = true;
               break;
                 
             default:
